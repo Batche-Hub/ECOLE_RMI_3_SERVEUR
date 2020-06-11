@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/Boule/Documents/NetBeansProjects/ECOLE_RMI_3_SERVEUR/src/fr/doranco/ecole/main/Main.java</file>
+            <file>file:/C:/Users/Boule/Documents/NetBeansProjects/ECOLE_RMI_3_SERVEUR/src/fr/doranco/ecole/model/EtudiantImpl.java</file>
+            <file>file:/C:/Users/Boule/Documents/NetBeansProjects/ECOLE_RMI_3_SERVEUR/src/fr/doranco/ecole/model/EcoleDataSource.java</file>
+            <file>file:/C:/Users/Boule/Documents/NetBeansProjects/ECOLE_RMI_3_SERVEUR/src/fr/doranco/ecole/model/EnseignantImpl.java</file>
+            <file>file:/C:/Users/Boule/Documents/NetBeansProjects/ECOLE_RMI_3_SERVEUR/src/fr/doranco/ecole/rmi/server/RmiEnseignant.java</file>
+            <file>file:/C:/Users/Boule/Documents/NetBeansProjects/ECOLE_RMI_3_SERVEUR/src/fr/doranco/ecole/rmi/server/RmiEtudiant.java</file>
+        </group>
+    </open-files>
+</project-private>
