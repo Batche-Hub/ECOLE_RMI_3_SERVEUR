@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Etudiant.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;ECOLE_RMI_3_SERVEUR&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">fr.doranco.ecole.entity</a> &gt; <span class="el_source">Etudiant.java</span></div><h1>Etudiant.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package fr.doranco.ecole.entity;
+
+import fr.doranco.ecole.utils.enums.Specialite;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author Boule
+ */
+public class Etudiant implements Serializable {
+    //Serial
+    private static final long serialVersionUID = 11L;
+    
+    
+    //propriétés
+    private int id;
+    private String nom;
+    private String prenom;
+    private int age;
+    private String telephone;
+    private String email;
+    private Adresse adresse;
+    private String specialite;
+    private String section;
+    private String groupe;
+    private List&lt;Cours&gt; listeCoursSuivis; // = new ArrayList&lt;Cours&gt;();
+    
+    
+    //Constructeurs
+    //vide
+<span class="fc" id="L38">    public Etudiant() {</span>
+<span class="fc" id="L39">    }</span>
+    //plein
+
+<span class="nc" id="L42">    public Etudiant(String nom, String prenom, int age, String telephone, String email, Adresse adresse, String specialite, String section, String groupe, List&lt;Cours&gt; listeCoursSuivis) {</span>
+<span class="nc" id="L43">        this.nom = nom;</span>
+<span class="nc" id="L44">        this.prenom = prenom;</span>
+<span class="nc" id="L45">        this.age = age;</span>
+<span class="nc" id="L46">        this.telephone = telephone;</span>
+<span class="nc" id="L47">        this.email = email;</span>
+<span class="nc" id="L48">        this.adresse = adresse;</span>
+<span class="nc" id="L49">        this.specialite = specialite;</span>
+<span class="nc" id="L50">        this.section = section;</span>
+<span class="nc" id="L51">        this.groupe = groupe;</span>
+<span class="nc" id="L52">        this.listeCoursSuivis = listeCoursSuivis;</span>
+<span class="nc" id="L53">    }</span>
+    
+    //celui dont on aura besoin
+
+<span class="nc" id="L57">    public Etudiant(String nom, String prenom, String specialite) {</span>
+<span class="nc" id="L58">        this.nom = nom;</span>
+<span class="nc" id="L59">        this.prenom = prenom;</span>
+<span class="nc" id="L60">        this.specialite = specialite;</span>
+<span class="nc" id="L61">    }</span>
+    
+    
+    
+    //Get et Set
+
+    public int getId() {
+<span class="fc" id="L68">        return id;</span>
+    }
+
+    public void setId(int id) {
+<span class="nc" id="L72">        this.id = id;</span>
+<span class="nc" id="L73">    }</span>
+
+    public String getNom() {
+<span class="nc" id="L76">        return nom;</span>
+    }
+
+    public void setNom(String nom) {
+<span class="nc" id="L80">        this.nom = nom;</span>
+<span class="nc" id="L81">    }</span>
+
+    public String getPrenom() {
+<span class="nc" id="L84">        return prenom;</span>
+    }
+
+    public void setPrenom(String prenom) {
+<span class="nc" id="L88">        this.prenom = prenom;</span>
+<span class="nc" id="L89">    }</span>
+
+    public int getAge() {
+<span class="nc" id="L92">        return age;</span>
+    }
+
+    public void setAge(int age) {
+<span class="nc" id="L96">        this.age = age;</span>
+<span class="nc" id="L97">    }</span>
+
+    public String getTelephone() {
+<span class="nc" id="L100">        return telephone;</span>
+    }
+
+    public void setTelephone(String telephone) {
+<span class="nc" id="L104">        this.telephone = telephone;</span>
+<span class="nc" id="L105">    }</span>
+
+    public String getEmail() {
+<span class="nc" id="L108">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="nc" id="L112">        this.email = email;</span>
+<span class="nc" id="L113">    }</span>
+
+    public Adresse getAdresse() {
+<span class="nc" id="L116">        return adresse;</span>
+    }
+
+    public void setAdresse(Adresse adresse) {
+<span class="nc" id="L120">        this.adresse = adresse;</span>
+<span class="nc" id="L121">    }</span>
+
+    public String getSpecialite() {
+<span class="nc" id="L124">        return specialite;</span>
+    }
+
+    public void setSpecialite(String specialite) {
+<span class="nc" id="L128">        this.specialite = specialite;</span>
+<span class="nc" id="L129">    }</span>
+
+    public String getSection() {
+<span class="nc" id="L132">        return section;</span>
+    }
+
+    public void setSection(String section) {
+<span class="nc" id="L136">        this.section = section;</span>
+<span class="nc" id="L137">    }</span>
+
+    public String getGroupe() {
+<span class="nc" id="L140">        return groupe;</span>
+    }
+
+    public void setGroupe(String groupe) {
+<span class="nc" id="L144">        this.groupe = groupe;</span>
+<span class="nc" id="L145">    }</span>
+
+    public List&lt;Cours&gt; getListeCoursSuivis() {
+<span class="nc" id="L148">        return listeCoursSuivis;</span>
+    }
+
+    public void setListeCoursSuivis(List&lt;Cours&gt; listeCoursSuivis) {
+<span class="nc" id="L152">        this.listeCoursSuivis = listeCoursSuivis;</span>
+<span class="nc" id="L153">    }</span>
+
+    @Override
+    public String toString() {
+<span class="fc" id="L157">        return &quot;Etudiant{&quot; + &quot;id=&quot; + id + &quot;, nom=&quot; + nom + &quot;, prenom=&quot; + prenom + &quot;, specialite=&quot; + specialite + '}';</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

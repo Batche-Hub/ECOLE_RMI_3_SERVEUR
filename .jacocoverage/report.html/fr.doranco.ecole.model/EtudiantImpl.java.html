@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EtudiantImpl.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;ECOLE_RMI_3_SERVEUR&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">fr.doranco.ecole.model</a> &gt; <span class="el_source">EtudiantImpl.java</span></div><h1>EtudiantImpl.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package fr.doranco.ecole.model;
+
+
+import fr.doranco.ecole.entity.Etudiant;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+
+/**
+ *
+ * @author Boule
+ */
+public class EtudiantImpl implements IEtudiant {
+
+    //Constructeur
+<span class="fc" id="L28">    public EtudiantImpl() {</span>
+<span class="fc" id="L29">    }</span>
+    
+    //Méthodes de l'interface à redéfinir
+    @Override
+    public Etudiant getEtudiantById(int id) {
+<span class="fc" id="L34">        Etudiant etudiant = new Etudiant();</span>
+<span class="fc" id="L35">        Connection connection = EcoleDataSource.getConnection();</span>
+
+<span class="fc" id="L37">        String requete = &quot;SELECT * FROM etudiant WHERE id = ?&quot;;</span>
+<span class="fc" id="L38">        PreparedStatement ps = null;</span>
+        try {
+            
+<span class="fc" id="L41">            ps = connection.prepareStatement(requete);</span>
+<span class="fc" id="L42">            ps.setInt(1, id);</span>
+            
+            
+<span class="fc" id="L45">            ResultSet rs = ps.executeQuery();</span>
+            
+
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">            if (rs.next()) {</span>
+                
+<span class="nc" id="L50">                etudiant.setId(rs.getInt(&quot;id&quot;));</span>
+<span class="nc" id="L51">                etudiant.setNom(rs.getString(&quot;nom&quot;));</span>
+<span class="nc" id="L52">                etudiant.setPrenom(rs.getString(&quot;prenom&quot;));</span>
+<span class="nc" id="L53">                etudiant.setSpecialite(rs.getString(&quot;specialite&quot;));</span>
+            }
+<span class="nc" id="L55">        } catch (Exception e) {</span>
+<span class="nc" id="L56">            System.out.println(&quot;Une erreur est survenue : &quot; + e);</span>
+<span class="nc" id="L57">            return null;</span>
+        } finally {
+<span class="pc bpc" id="L59" title="5 of 6 branches missed.">            if (connection != null) {</span>
+                try {
+<span class="pc" id="L61">                    connection.close();</span>
+<span class="nc" id="L62">                } catch (SQLException ex) {</span>
+<span class="nc" id="L63">                    System.err.println(&quot;Une erreur Sql est survenue : &quot; + ex);</span>
+                    
+<span class="pc" id="L65">                }</span>
+
+            }
+
+<span class="nc" id="L69">        }</span>
+<span class="fc" id="L70">        return etudiant;</span>
+    }
+
+    @Override
+    public Etudiant addEtudiant(Etudiant etudiant) {
+        //Je fais la connection via la classe DataSource qui contient toutes les informations nécessaires pour fair ele lien avec la BDD
+<span class="fc" id="L76">        Connection connexion = EcoleDataSource.getConnection();</span>
+
+        //J'écris ma requête vers la BDD. INSERT INTO pour insérer l'objet Etudiant (passé en paramètre pour rappel)
+        //ensuite je dois entourer d'un try catch car ça peut générer une erreur (je suis throws remote exception)
+<span class="fc" id="L80">        String requete = &quot;INSERT INTO etudiant(nom, prenom, specialite) VALUE(?,?,?)&quot;;</span>
+<span class="fc" id="L81">        PreparedStatement ps = null;</span>
+        try {
+            
+<span class="fc" id="L84">            ps = connexion.prepareStatement(requete, Statement.RETURN_GENERATED_KEYS);</span>
+            //Je spécifie à quoi correspond dans Java les points d'interrogation de ma requête.
+<span class="nc" id="L86">            ps.setString(1, etudiant.getNom());</span>
+<span class="nc" id="L87">            ps.setString(2, etudiant.getPrenom());</span>
+<span class="nc" id="L88">            ps.setString(3, etudiant.getSpecialite());</span>
+            // Je mets à jour
+<span class="nc" id="L90">            ps.executeUpdate();</span>
+            //Je mets l'id de ma BDD dans l'étudiant (qui ne possède donc pas encore d'Id vu qu'elle est créée lors de la création de l'étudiant dans la BDD
+
+<span class="nc" id="L93">            ResultSet resultSet = ps.getGeneratedKeys();</span>
+            //Ici je parcours ma ligne et je spécifie que mon id se trouve à la colonne 1 (getInt(1)).
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            if (resultSet.next()) {</span>
+<span class="nc" id="L96">                Integer id = resultSet.getInt(1);</span>
+<span class="nc" id="L97">                etudiant.setId(id);</span>
+            }
+
+<span class="fc" id="L100">        } catch (Exception e) {</span>
+<span class="fc" id="L101">            System.err.println(&quot;Une erreur de connexion est survenue.&quot; + e);</span>
+        } finally {
+<span class="pc bpc" id="L103" title="5 of 6 branches missed.">            if (connexion != null) {</span>
+                try {
+<span class="pc" id="L105">                    connexion.close();</span>
+<span class="nc" id="L106">                } catch (SQLException ex) {</span>
+<span class="nc" id="L107">                   System.err.println(&quot;Une erreur SQL est survenue : &quot;+ex);</span>
+<span class="pc" id="L108">                }</span>
+            }
+
+<span class="nc" id="L111">        }</span>
+<span class="fc" id="L112">        return etudiant;</span>
+    }
+
+    @Override
+    public void updateEtudiant(Etudiant etudiant) {
+        
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (getEtudiantById(etudiant.getId()).getId() != 0){</span>
+<span class="nc" id="L119">        Connection connexion = EcoleDataSource.getConnection();</span>
+
+        //J'écris ma requête vers la BDD. INSERT INTO pour insérer l'objet Etudiant (passé en paramètre pour rappel)
+        //ensuite je dois entourer d'un try catch car ça peut générer une erreur (je suis throws remote exception)
+<span class="nc" id="L123">        String requete = &quot;UPDATE etudiant SET nom = ?, prenom=?, specialite=? WHERE id=?&quot;;</span>
+<span class="nc" id="L124">        PreparedStatement ps = null;</span>
+        try {
+<span class="nc" id="L126">            ps = connexion.prepareStatement(requete);</span>
+            //Je spécifie à quoi correspond dans Java les points d'interrogation de ma requête.
+<span class="nc" id="L128">            ps.setString(1, etudiant.getNom());</span>
+<span class="nc" id="L129">            ps.setString(2, etudiant.getPrenom());</span>
+<span class="nc" id="L130">            ps.setString(3, etudiant.getSpecialite());</span>
+<span class="nc" id="L131">            ps.setInt(4, etudiant.getId());</span>
+            // Je mets à jour
+<span class="nc" id="L133">            ps.executeUpdate();</span>
+<span class="nc" id="L134">        } catch (Exception e) {</span>
+<span class="nc" id="L135">            System.err.println(&quot;Une erreur de connexion est survenue.&quot; + e);</span>
+        } finally {
+<span class="nc bnc" id="L137" title="All 6 branches missed.">            if (connexion != null) {</span>
+                try {
+<span class="nc" id="L139">                    connexion.close();</span>
+<span class="nc" id="L140">                } catch (SQLException ex) {</span>
+<span class="nc" id="L141">                System.err.println(&quot;Une erreur SQL est survenue : &quot;+ex);</span>
+<span class="nc" id="L142">                }</span>
+            }
+<span class="nc" id="L144">        }</span>
+<span class="nc" id="L145">        }else{</span>
+<span class="nc" id="L146">            System.err.println(&quot;Vous ne pouvez pas changer les propriétés d'une personne qui n'existe pas !&quot;);</span>
+        }
+<span class="nc" id="L148">    }</span>
+
+    @Override
+    public void removeEtudiant(int id) {
+<span class="fc" id="L152">        System.err.println(this.getEtudiantById(id));</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (this.getEtudiantById(id).getId() != 0){</span>
+<span class="nc" id="L154">            System.err.println(&quot;Remove&quot;);</span>
+<span class="nc" id="L155">        Connection connection = EcoleDataSource.getConnection();</span>
+
+<span class="nc" id="L157">        String requete = &quot;DELETE FROM etudiant WHERE id = &quot; + id;</span>
+        
+            try {
+<span class="nc" id="L160">                PreparedStatement ps = connection.prepareStatement(requete);</span>
+<span class="nc" id="L161">                ps.executeUpdate();</span>
+<span class="nc" id="L162">            } catch (Exception e) {</span>
+<span class="nc" id="L163">                System.err.println(&quot;Une erreur de connexion est survenue.&quot; + e);</span>
+            } finally {
+<span class="nc bnc" id="L165" title="All 6 branches missed.">                if (connection != null) {</span>
+                    try {
+<span class="nc" id="L167">                        connection.close();</span>
+<span class="nc" id="L168">                    } catch (SQLException ex) {</span>
+<span class="nc" id="L169">                        System.err.println(&quot;Erreur de connexion SQL : &quot; + ex);</span>
+<span class="nc" id="L170">                    }</span>
+                }
+<span class="nc" id="L172">            }</span>
+<span class="nc" id="L173">        }else{</span>
+<span class="fc" id="L174">            System.err.println(&quot;Cet étudiant n'existe pas !&quot;);</span>
+        }
+        
+<span class="fc" id="L177">    }</span>
+
+    @Override
+    public List&lt;Etudiant&gt; getListeEtudiantByGroupe(String groupe) {
+<span class="fc" id="L181">        List&lt;Etudiant&gt; listeEtudiants = new ArrayList&lt;&gt;();</span>
+       
+<span class="fc" id="L183">        Connection connection = EcoleDataSource.getConnection();</span>
+       
+<span class="fc" id="L185">        String requete = &quot;SELECT * FROM etudiant WHERE section = ? &quot;;</span>
+<span class="fc" id="L186">        PreparedStatement ps = null;</span>
+        try {
+<span class="fc" id="L188">            ps = connection.prepareStatement(requete);</span>
+<span class="fc" id="L189">            ps.setString(1, groupe);</span>
+<span class="fc" id="L190">            ResultSet rs = ps.executeQuery();</span>
+            
+           
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">            while (rs.next()) {</span>
+               
+<span class="nc" id="L195">                Etudiant etudiant = new Etudiant();</span>
+               
+<span class="nc" id="L197">                etudiant.setId(rs.getInt(&quot;id&quot;));</span>
+<span class="nc" id="L198">                etudiant.setNom(rs.getString(&quot;nom&quot;));</span>
+<span class="nc" id="L199">                etudiant.setPrenom(rs.getString(&quot;prenom&quot;));</span>
+<span class="nc" id="L200">                etudiant.setSpecialite(rs.getString(&quot;groupe&quot;));</span>
+               
+<span class="nc" id="L202">                listeEtudiants.add(etudiant);</span>
+<span class="nc" id="L203">            }</span>
+           
+<span class="nc" id="L205">        } catch (SQLException e) {</span>
+           
+        } finally {
+<span class="pc bpc" id="L208" title="5 of 6 branches missed.">            if (connection != null) {</span>
+                try {
+<span class="pc" id="L210">                    connection.close();</span>
+<span class="nc" id="L211">                } catch (SQLException ex) {</span>
+<span class="nc" id="L212">                    System.err.println(&quot;Erreur de connexion SQL : &quot; + ex);</span>
+<span class="pc" id="L213">                }</span>
+            }
+<span class="nc" id="L215">        }</span>
+<span class="fc" id="L216">        return listeEtudiants;</span>
+    
+    }
+
+    @Override
+    public List&lt;Etudiant&gt; getListeEtudiantBySection(String section) {
+<span class="fc" id="L222">                List&lt;Etudiant&gt; listeEtudiants = new ArrayList&lt;&gt;();</span>
+       
+<span class="fc" id="L224">        Connection connection = EcoleDataSource.getConnection();</span>
+       
+<span class="fc" id="L226">        String requete = &quot;SELECT * FROM etudiant WHERE section = ? &quot;;</span>
+<span class="fc" id="L227">        PreparedStatement ps = null;</span>
+        try {
+<span class="fc" id="L229">            ps = connection.prepareStatement(requete);</span>
+<span class="fc" id="L230">            ps.setString(1, section);</span>
+<span class="fc" id="L231">            ResultSet rs = ps.executeQuery();</span>
+            
+           
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">            while (rs.next()) {</span>
+               
+<span class="nc" id="L236">                Etudiant etudiant = new Etudiant();</span>
+               
+<span class="nc" id="L238">                etudiant.setId(rs.getInt(&quot;id&quot;));</span>
+<span class="nc" id="L239">                etudiant.setNom(rs.getString(&quot;nom&quot;));</span>
+<span class="nc" id="L240">                etudiant.setPrenom(rs.getString(&quot;prenom&quot;));</span>
+<span class="nc" id="L241">                etudiant.setSpecialite(rs.getString(&quot;section&quot;));</span>
+               
+<span class="nc" id="L243">                listeEtudiants.add(etudiant);</span>
+<span class="nc" id="L244">            }</span>
+           
+<span class="nc" id="L246">        } catch (SQLException e) {</span>
+           
+        } finally {
+<span class="pc bpc" id="L249" title="5 of 6 branches missed.">            if (connection != null) {</span>
+                try {
+<span class="pc" id="L251">                    connection.close();</span>
+<span class="nc" id="L252">                } catch (SQLException ex) {</span>
+<span class="nc" id="L253">                    System.err.println(&quot;Erreur de connexion SQL : &quot; + ex);</span>
+<span class="pc" id="L254">                }</span>
+            }
+<span class="nc" id="L256">        }</span>
+<span class="fc" id="L257">        return listeEtudiants;</span>
+    }
+
+    @Override
+    public List&lt;Etudiant&gt; getListeEtudiantBySpecialite(String specialite) {
+<span class="fc" id="L262">        List&lt;Etudiant&gt; listeEtudiants = new ArrayList&lt;&gt;();</span>
+       
+<span class="fc" id="L264">        Connection connection = EcoleDataSource.getConnection();</span>
+       
+<span class="fc" id="L266">        String requete = &quot;SELECT * FROM etudiant WHERE specialite = ? &quot;;</span>
+<span class="fc" id="L267">        PreparedStatement ps = null;</span>
+        try {
+<span class="fc" id="L269">            ps = connection.prepareStatement(requete);</span>
+<span class="fc" id="L270">            ps.setString(1, specialite);</span>
+<span class="fc" id="L271">            ResultSet rs = ps.executeQuery();</span>
+            
+           
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">            while (rs.next()) {</span>
+               
+<span class="nc" id="L276">                Etudiant etudiant = new Etudiant();</span>
+               
+<span class="nc" id="L278">                etudiant.setId(rs.getInt(&quot;id&quot;));</span>
+<span class="nc" id="L279">                etudiant.setNom(rs.getString(&quot;nom&quot;));</span>
+<span class="nc" id="L280">                etudiant.setPrenom(rs.getString(&quot;prenom&quot;));</span>
+<span class="nc" id="L281">                etudiant.setSpecialite(rs.getString(&quot;specialite&quot;));</span>
+               
+<span class="nc" id="L283">                listeEtudiants.add(etudiant);</span>
+<span class="nc" id="L284">            }</span>
+           
+<span class="nc" id="L286">        } catch (SQLException e) {</span>
+           
+        } finally {
+<span class="pc bpc" id="L289" title="5 of 6 branches missed.">            if (connection != null) {</span>
+                try {
+<span class="pc" id="L291">                    connection.close();</span>
+<span class="nc" id="L292">                } catch (SQLException ex) {</span>
+<span class="nc" id="L293">                    System.err.println(&quot;Erreur de connexion SQL : &quot; + ex);</span>
+<span class="pc" id="L294">                }</span>
+            }
+<span class="nc" id="L296">        }</span>
+<span class="fc" id="L297">        return listeEtudiants;  </span>
+    }
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
